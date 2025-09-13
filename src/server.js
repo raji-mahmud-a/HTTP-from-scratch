@@ -4,10 +4,10 @@ function parseRequestMessage(requestData) {
   const [head, body] = requestData.split("\r\n\r\n");
 
   const lines = head.split("\r\n");
-  const [method, path, version] = head.split(" ");
+  const [method, path, version] = lines[0].split(" ");
   const headers = {};
 
-  for (i = 1; i < lines.length; i++) {
+  for (let i = 1; i < lines.length; i++) {
     const [key, value] = lines[i].split(": ");
     headers[key] = value;
   }
@@ -42,6 +42,8 @@ const server = net.createServer((socket) => {
           console.error("Socket write error: ", err);
         }
       });
+
+      console.log(parseRequestMessage(requestData))
     }
 
     socket.end();
