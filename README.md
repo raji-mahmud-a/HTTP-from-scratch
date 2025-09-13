@@ -21,6 +21,8 @@ server.route("GET", "/", (request, response) => {
 server.route("GET", "/error", (request, response) => {
     response.status(404).send("Not Found");
 })
+
+server.start()
 ```
 
 - open your browser and go to `http://127.0.0.1:8000`
