@@ -23,6 +23,12 @@ class Server extends EventEmitter {
     this.#_server.listen(this.port, this.host);
   }
 
+  /**
+   * 
+   * @param {string} method - HTTP method (GET, POST)
+   * @param {string} path - Route path
+   * @param {Function} routeHandler - handler for the path and method
+   */
   route(method, path, routeHandler) {
     if (!["GET", "POST"].includes(method.toUpperCase())) {
       throw new TypeError(`${method} method is not supported!`); 
