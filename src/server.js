@@ -80,7 +80,7 @@ class Server extends EventEmitter {
     return responseMessage;
   }
 
-  start() {
+  start(callback) {
     this.#_server = net.createServer((_socket) => {
       let requestData = "";
       _socket.on("data", (chunk) => {
@@ -165,7 +165,7 @@ class Server extends EventEmitter {
       });
     });
 
-    this.#_server.listen(this.port, this.host);
+    this.#_server.listen(this.port, this.host, callback);
   }
 
   /**
