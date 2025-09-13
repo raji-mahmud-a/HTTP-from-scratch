@@ -1,6 +1,6 @@
 # HTTP-from-scratch
 
-A barebones HTTP/1.1 server built only with raw TCP sockets (`net` module), immplemented my own routing system
+A barebones HTTP/1.1 server built only with raw TCP sockets (`net` module), implemented my own routing system
 No frameworks used.
 
 ## usage
