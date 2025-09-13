@@ -12,3 +12,4 @@ or
 ```bash
 $ npm start
 ```
+- open your browser and go to `http://localhost:8888`

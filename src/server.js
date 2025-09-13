@@ -1,4 +1,5 @@
 import net from "node:net";
+import { EventEmitter } from "node:events";
 
 function parseRequestMessage(requestData) {
   const [head, body] = requestData.split("\r\n\r\n");
@@ -43,11 +44,10 @@ const server = net.createServer((socket) => {
         }
       });
 
-      console.log(parseRequestMessage(requestData))
+      console.log(parseRequestMessage(requestData));
 
       socket.end();
     }
-
   });
 
   socket.on("close", () => {
@@ -62,3 +62,28 @@ const server = net.createServer((socket) => {
 server.listen(8888, () => {
   console.log("HTTP server running...");
 });
+
+class Server extends EventEmitter {
+  #_server;
+  constructor({ port = 8000, host = "127.0.0.1" }) {
+    super();
+    this.port = port;
+    this.host = host;
+  }
+
+  #handleRequestMessage(chunk) {
+    console.log(chunk.toString())
+  }
+
+  start() {
+    this.#_server = net.createServer((_socket) => {
+        _socket.on("data", this.#handleRequestMessage)
+    });
+
+    this.#_server.listen(this.port, this.host)
+  }
+}
+
+const app = new Server({});
+
+console.log(app.start());
