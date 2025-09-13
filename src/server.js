@@ -37,28 +37,28 @@ class Server extends EventEmitter {
 
   start() {
     this.#_server = net.createServer((_socket) => {
+      let requestData = "";
       _socket.on("data", (chunk) => {
+        requestData += chunk.toString();
         // check if request message has ended, to prevent responding to half recieved chunks of data
         if (chunk.toString().includes("\r\n\r\n")) {
+          const requestMessage = this.#parseRequestMessage(requestData);
 
-          const requestMessage = this.#parseRequestMessage(chunk.toString());
-          
           const routeKey = `${requestMessage.method}:${requestMessage.path}`;
 
           if (!this.routes.has(routeKey)) {
-            console.log("404")
+            console.log("404");
           } else {
             const routeHandler = this.routes.get(routeKey);
-            routeHandler(console, console)
+            routeHandler(console, console);
           }
-
         }
       });
 
       _socket.on("error", (error) => {
-        console.error("ERROR: ", error.message)
-      })
-    }); 
+        console.error("ERROR: ", error.message);
+      });
+    });
 
     this.#_server.listen(this.port, this.host);
   }
