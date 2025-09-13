@@ -35,6 +35,8 @@ class Server extends EventEmitter {
     }
   }
 
+  #buildResponseMessage(statusCode, headers, data) {}
+
   start() {
     this.#_server = net.createServer((_socket) => {
       let requestData = "";
@@ -53,14 +55,49 @@ class Server extends EventEmitter {
             body: parsedRequest.body,
 
             /**
-             * 
-             * @param {string} header 
+             *
+             * @param {string} header
              * @returns {boolean}
              */
             getHeader: (header) => {
-                return request.headers.hasOwnProperty(header) ? request.headers[header] : undefined
-            }
-          }
+              return request.headers.hasOwnProperty(header)
+                ? request.headers[header]
+                : undefined;
+            },
+          };
+
+          // response object to send the routehandler
+
+          const buildResponse = (statusCode, headers, data) => {
+            return this.#buildResponseMessage(statusCode, headers, data);
+          };
+
+          const response = {
+            statusCode: 200,
+            headers: {},
+
+            // i'm returning the object "this" so you can use object chaining, eg. response.status(200).setHeader("name", "value").send("data")
+            status(code) {
+              this.statusCode = code;
+              return this;
+            },
+
+            setHeader(name, value) {
+              this.headers[name] = value;
+              return this;
+            },
+
+            send(data) {
+              const response = buildResponse(this.statusCode, this.headers, data);
+              _socket.write(response);
+              _socket.end();
+            },
+
+            json(obj) {
+              this.setHeader("Content-Type", "application/json");
+              this.send(JSON.stringify(obj));
+            },
+          };
 
           const routeKey = `${request.method}:${request.path}`;
 
