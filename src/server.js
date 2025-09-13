@@ -36,8 +36,7 @@ class Server extends EventEmitter {
   }
 
   #getStatusText(statusCode) {
-    
-    statusTexts = {
+    const statusTexts = {
       200: "OK",
       201: "Created",
       204: "No Content",
@@ -55,19 +54,28 @@ class Server extends EventEmitter {
       502: "Bad Gateway",
       503: "Service Unavailable",
     };
-
   }
 
   #buildResponseMessage(statusCode, headers, data) {
     let responseMessage = "";
+    let statusText = this.#getStatusText(statusCode) || "Unknown";
 
     responseMessage +=
-      "HTTP/1.1 " +
-      " " +
-      statusCode +
-      " " +
-      this.#getStatusText(statusCode) +
-      "\r\n";
+      "HTTP/1.1 " + " " + statusCode + " " + statusText + "\r\n";
+
+    for (let header of Object.entries(headers)) {
+      const [name, value] = header;
+      responseMessage += name + ": " + value + "\r\n";
+    }
+
+    if (!headers.hasOwnProperty("Content-Length")) {
+      responseMessage +=
+        "Content-Length: " + Buffer.byteLength(data).toString() + "\r\n";
+    }
+
+    responseMessage + "\r\n" + data;
+
+    return responseMessage;
   }
 
   start() {
