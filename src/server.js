@@ -1,5 +1,28 @@
 import net from "node:net";
 
+function parseRequestMessage(requestData) {
+  const [head, body] = requestData.split("\r\n\r\n");
+
+  const lines = head.split("\r\n");
+  const [method, path, version] = head.split(" ");
+  const headers = {};
+
+  for (i = 1; i < lines.length; i++) {
+    const [key, value] = lines[i].split(": ");
+    headers[key] = value;
+  }
+
+  return {
+    head: {
+      method,
+      path,
+      version,
+      headers,
+    },
+    body,
+  };
+}
+
 const server = net.createServer((socket) => {
   let requestData = "";
 
@@ -25,12 +48,12 @@ const server = net.createServer((socket) => {
   });
 
   socket.on("close", () => {
-    console.log("Client disconnected!")
-  })
+    console.log("Client disconnected!");
+  });
 
   socket.on("error", (err) => {
-    console.error("Socket error: ", err)
-  })
+    console.error("Socket error: ", err);
+  });
 });
 
 server.listen(8888, () => {
