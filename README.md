@@ -7,3 +7,8 @@ No frameworks.
 
 ```bash
 $ node src/server.js
+```
+or 
+```bash
+$ npm start
+```
