@@ -40,10 +40,25 @@ class Server extends EventEmitter {
       _socket.on("data", (chunk) => {
         // check if request message has ended, to prevent responding to half recieved chunks of data
         if (chunk.toString().includes("\r\n\r\n")) {
-          this.#parseRequestMessage(chunk.toString());
+
+          const requestMessage = this.#parseRequestMessage(chunk.toString());
+          
+          const routeKey = `${requestMessage.method}:${requestMessage.path}`;
+
+          if (!this.routes.has(routeKey)) {
+            console.log("404")
+          } else {
+            const routeHandler = this.routes.get(routeKey);
+            routeHandler(console, console)
+          }
+
         }
       });
-    });
+
+      _socket.on("error", (error) => {
+        console.error("ERROR: ", error.message)
+      })
+    }); 
 
     this.#_server.listen(this.port, this.host);
   }
