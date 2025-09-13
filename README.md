@@ -5,6 +5,14 @@ No frameworks used.
 
 ## usage
 
+```bash
+$ git clone https://github.com/greatm3/HTTP-from-scratch
+
+$ cd HTTP-from-scratch
+
+$ npm start # node src/main.js
+```
+
 ```js
 
 // src/main.js
