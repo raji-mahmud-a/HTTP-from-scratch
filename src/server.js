@@ -15,15 +15,14 @@ const server = net.createServer((socket) => {
 
     socket.write(response, (err) => {
         if (err) {
-            console.error(err)
-            process.exit(1)
+            console.error("Socket write error: ", err) 
         }
     })
 
-    socket.end(() => {
-        console.log("HTTP server started at port 8888")
-    })
+    socket.end()
   });
 });
 
-server.listen(8888);
+server.listen(8888, () => {
+    console.log("HTTP server running...")
+});
