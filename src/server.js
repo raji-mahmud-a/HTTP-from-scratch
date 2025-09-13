@@ -75,7 +75,7 @@ class Server extends EventEmitter {
         "Content-Length: " + Buffer.byteLength(data).toString() + "\r\n";
     }
 
-    responseMessage + "\r\n" + data;
+    responseMessage += "\r\n" + data;
 
     return responseMessage;
   }
