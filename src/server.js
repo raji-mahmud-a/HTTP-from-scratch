@@ -17,12 +17,22 @@ class Server extends EventEmitter {
     this.routes = new Map();
   }
 
-  #handleRequestMessage(chunk) {}
+  #handleRequestMessage(chunk) {
+    const requestData = chunk.toString()
+
+    if (requestData.includes("\r\n\r\n")) {
+
+    }
+  }
 
   start() {
     this.#_server = net.createServer((_socket) => {
       _socket.on("data", (chunk) => {
-        this.#handleRequestMessage(chunk);
+        // check if request message has ended, to prevent responding to half recieved chunks of data
+        if (chunk.toString().includes("\r\n\r\n")) {
+            this.#handleRequestMessage(chunk);
+        }
+        
       });
     });
 
