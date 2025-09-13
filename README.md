@@ -6,4 +6,4 @@ No frameworks.
 ## run
 
 ```bash
-pc$ node src/server.js
+$ node src/server.js
