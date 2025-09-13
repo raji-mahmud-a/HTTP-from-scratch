@@ -151,7 +151,8 @@ class Server extends EventEmitter {
           const routeKey = `${request.method}:${request.path}`;
 
           if (!this.routes.has(routeKey)) {
-            console.log("404");
+            response.setHeader("Content-Type", "text/html")
+            response.status(404).send(`<span>${request.path} Not Found!<span>`)
           } else {
             const routeHandler = this.routes.get(routeKey);
             routeHandler(request, response);
