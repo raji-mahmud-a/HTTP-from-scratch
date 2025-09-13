@@ -3,26 +3,36 @@ import net from "node:net";
 const server = net.createServer((socket) => {
   let requestData = "";
 
-  socket.on("data", (data) => {
-    requestData += data;
+  socket.on("data", (chunk) => {
+    requestData += chunk.toString();
 
-    const response =
-      "HTTP/1.1 200 OK\r\n" +
-      "Content-Type: text/plain\r\n" +
-      "Content-Length: 13\r\n" +
-      "\r\n" +
-      "Hello, world!";
+    if (requestData.includes("\r\n\r\n")) {
+      const response =
+        "HTTP/1.1 200 OK\r\n" +
+        "Content-Type: text/plain\r\n" +
+        "Content-Length: 13\r\n" +
+        "\r\n" +
+        "Hello, world!";
 
-    socket.write(response, (err) => {
+      socket.write(response, (err) => {
         if (err) {
-            console.error("Socket write error: ", err) 
+          console.error("Socket write error: ", err);
         }
-    })
+      });
+    }
 
-    socket.end()
+    socket.end();
   });
+
+  socket.on("close", () => {
+    console.log("Client disconnected!")
+  })
+
+  socket.on("error", (err) => {
+    console.error("Socket error: ", err)
+  })
 });
 
 server.listen(8888, () => {
-    console.log("HTTP server running...")
+  console.log("HTTP server running...");
 });
