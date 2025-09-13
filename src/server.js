@@ -65,6 +65,7 @@ server.listen(8888, () => {
 
 class Server extends EventEmitter {
   #_server;
+
   constructor({ port = 8000, host = "127.0.0.1" }) {
     super();
     this.port = port;
@@ -72,7 +73,7 @@ class Server extends EventEmitter {
   }
 
   #handleRequestMessage(chunk) {
-    console.log(chunk.toString())
+    
   }
 
   start() {
