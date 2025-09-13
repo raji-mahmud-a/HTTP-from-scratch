@@ -44,9 +44,10 @@ const server = net.createServer((socket) => {
       });
 
       console.log(parseRequestMessage(requestData))
+
+      socket.end();
     }
 
-    socket.end();
   });
 
   socket.on("close", () => {
