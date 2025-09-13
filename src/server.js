@@ -17,11 +17,21 @@ class Server extends EventEmitter {
     this.routes = new Map();
   }
 
-  #handleRequestMessage(chunk) {
-    const requestData = chunk.toString()
+  #parseRequestMessage(requestMessage) {
+    if (requestMessage.includes("\r\n\r\n")) {
+      const [head, body] = requestMessage.split("\r\n\r\n");
 
-    if (requestData.includes("\r\n\r\n")) {
+      const lines = head.split("\r\n");
+      const [method, path, version] = lines[0].split(" ");
 
+      const headers = Object.create(null);
+
+      for (let i = 1; i < lines.length; i++) {
+        const [key, value] = lines[i].split(": ");
+        headers[key] = value;
+      }
+
+      return { method, path, version, headers, body };
     }
   }
 
@@ -30,9 +40,8 @@ class Server extends EventEmitter {
       _socket.on("data", (chunk) => {
         // check if request message has ended, to prevent responding to half recieved chunks of data
         if (chunk.toString().includes("\r\n\r\n")) {
-            this.#handleRequestMessage(chunk);
+          this.#parseRequestMessage(chunk.toString());
         }
-        
       });
     });
 
