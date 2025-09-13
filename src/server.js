@@ -24,7 +24,7 @@ class Server extends EventEmitter {
       const lines = head.split("\r\n");
       const [method, path, version] = lines[0].split(" ");
 
-      const headers = Object.create(null);
+      const headers = {};
 
       for (let i = 1; i < lines.length; i++) {
         const [key, value] = lines[i].split(": ");
@@ -40,17 +40,35 @@ class Server extends EventEmitter {
       let requestData = "";
       _socket.on("data", (chunk) => {
         requestData += chunk.toString();
+
         // check if request message has ended, to prevent responding to half recieved chunks of data
         if (chunk.toString().includes("\r\n\r\n")) {
-          const requestMessage = this.#parseRequestMessage(requestData);
+          const parsedRequest = this.#parseRequestMessage(requestData);
 
-          const routeKey = `${requestMessage.method}:${requestMessage.path}`;
+          // the request object to pass to the routeHandler
+          const request = {
+            method: parsedRequest.method,
+            path: parsedRequest.path,
+            headers: parsedRequest.headers,
+            body: parsedRequest.body,
+
+            /**
+             * 
+             * @param {string} header 
+             * @returns {boolean}
+             */
+            getHeader: (header) => {
+                return request.headers.hasOwnProperty(header) ? request.headers[header] : undefined
+            }
+          }
+
+          const routeKey = `${request.method}:${request.path}`;
 
           if (!this.routes.has(routeKey)) {
             console.log("404");
           } else {
             const routeHandler = this.routes.get(routeKey);
-            routeHandler(console, console);
+            routeHandler(request, console);
           }
         }
       });
