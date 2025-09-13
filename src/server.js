@@ -54,6 +54,8 @@ class Server extends EventEmitter {
       502: "Bad Gateway",
       503: "Service Unavailable",
     };
+
+    return statusTexts.hasOwnProperty(statusCode) ? statusTexts[statusCode] : undefined
   }
 
   #buildResponseMessage(statusCode, headers, data) {
@@ -61,7 +63,7 @@ class Server extends EventEmitter {
     let statusText = this.#getStatusText(statusCode) || "Unknown";
 
     responseMessage +=
-      "HTTP/1.1 " + " " + statusCode + " " + statusText + "\r\n";
+      "HTTP/1.1" + " " + statusCode + " " + statusText + "\r\n";
 
     for (let header of Object.entries(headers)) {
       const [name, value] = header;
@@ -121,7 +123,7 @@ class Server extends EventEmitter {
             status(code) {
               this.statusCode = code;
               return this;
-            },
+            }, 
 
             setHeader(name, value) {
               this.headers[name] = value;
@@ -134,6 +136,8 @@ class Server extends EventEmitter {
                 this.headers,
                 data
               );
+
+              console.log(response)
               _socket.write(response);
               _socket.end();
             },
@@ -150,7 +154,7 @@ class Server extends EventEmitter {
             console.log("404");
           } else {
             const routeHandler = this.routes.get(routeKey);
-            routeHandler(request, console);
+            routeHandler(request, response);
           }
         }
       });
