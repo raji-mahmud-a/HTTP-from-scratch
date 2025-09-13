@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "HTTP/1.1 server built only with raw TCP sockets (`net` module). ",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "start": "node src/server.js"
   },
