@@ -35,7 +35,40 @@ class Server extends EventEmitter {
     }
   }
 
-  #buildResponseMessage(statusCode, headers, data) {}
+  #getStatusText(statusCode) {
+    
+    statusTexts = {
+      200: "OK",
+      201: "Created",
+      204: "No Content",
+      301: "Moved Permanetly",
+      302: "Found",
+      304: "Not Modified",
+      400: "Bad Request",
+      401: "Unauthorized",
+      403: "Forbidden",
+      404: "Not Found",
+      405: "Method Not Allowed",
+      409: "Conflict",
+      422: "Unprocessable Entity",
+      500: "Internal Server Error",
+      502: "Bad Gateway",
+      503: "Service Unavailable",
+    };
+
+  }
+
+  #buildResponseMessage(statusCode, headers, data) {
+    let responseMessage = "";
+
+    responseMessage +=
+      "HTTP/1.1 " +
+      " " +
+      statusCode +
+      " " +
+      this.#getStatusText(statusCode) +
+      "\r\n";
+  }
 
   start() {
     this.#_server = net.createServer((_socket) => {
@@ -88,7 +121,11 @@ class Server extends EventEmitter {
             },
 
             send(data) {
-              const response = buildResponse(this.statusCode, this.headers, data);
+              const response = buildResponse(
+                this.statusCode,
+                this.headers,
+                data
+              );
               _socket.write(response);
               _socket.end();
             },
