@@ -14,8 +14,12 @@ import { Server } from "./server.js"
 const server = new Server(); // default port: 8000, host: 127.0.0.1
 
 server.route("GET", "/", (request, response) => {
-    response.setHeader("Content-Type", "text/plain");
-    response.send("Hello world");
+    response.setHeader("Content-Type", "text/html");
+    response.send("<h1>Hello world</h1>");
+})
+
+server.route("GET", "/json", (request, response) => {
+    response.json({ message: "hello, world" })
 })
 
 server.route("GET", "/error", (request, response) => {
@@ -26,3 +30,18 @@ server.start()
 ```
 
 - open your browser and go to `http://127.0.0.1:8000`
+
+## TODOs
+- [x] Basic HTTP request parsing
+- [x] GET method routing
+- [x] Response object with status/headers
+- [ ] POST method with body parsing
+- [ ] Query parameter parsing (?name=value)
+- [ ] Static file serving
+- [ ] Error handling middleware
+
+## What I Learned
+- TCP socket programming
+- HTTP protocol internals
+- Request parsing and response formatting
+- Routing system design
