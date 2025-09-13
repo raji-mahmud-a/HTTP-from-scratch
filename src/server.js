@@ -1,7 +1,7 @@
 import net from "node:net";
 import { EventEmitter } from "node:events";
 
-class Server extends EventEmitter {
+export class Server extends EventEmitter {
   #_server;
 
   /**
@@ -184,6 +184,6 @@ class Server extends EventEmitter {
   }
 }
 
-const miniServer = { Server };
+const serverScratch = { Server }
 
-export default miniServer;
+export default serverScratch
