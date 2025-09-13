@@ -6,10 +6,23 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     requestData += data;
 
-    const [head, body] = requestData.split("\r\n\r\n")
+    const response =
+      "HTTP/1.1 200 OK\r\n" +
+      "Content-Type: text/plain\r\n" +
+      "Content-Length: 13\r\n" +
+      "\r\n" +
+      "Hello, world!";
 
-    console.log({ head, body })
+    socket.write(response, (err) => {
+        if (err) {
+            console.error(err)
+            process.exit(1)
+        }
+    })
 
+    socket.end(() => {
+        console.log("HTTP server started at port 8888")
+    })
   });
 });
 
