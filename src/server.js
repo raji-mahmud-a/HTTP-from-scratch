@@ -31,7 +31,16 @@ export class Server extends EventEmitter {
         headers[key] = value;
       }
 
-      function parseFormData(body) {}
+      function parseFormData(body) {
+        const params = {};
+
+        body.split("&").forEach((entry) => {
+          const [key, value] = entry.split("=");
+          params[key] = value;
+        });
+
+        return params;
+      }
 
       function isValidJson(string) {
         if (!string || typeof string !== "string") return false;
@@ -50,7 +59,7 @@ export class Server extends EventEmitter {
 
       if (contentType === "application/json" && body) {
         if (isValidJson(body)) {
-            parsedBody = JSON.parse(body)
+          parsedBody = JSON.parse(body);
         }
       } else if (contentType === "application/x-www-form-urlencoded" && body) {
         parsedBody = parseFormData(body);
