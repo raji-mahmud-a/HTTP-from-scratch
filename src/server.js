@@ -31,7 +31,32 @@ export class Server extends EventEmitter {
         headers[key] = value;
       }
 
-      return { method, path, version, headers, body };
+      function parseFormData(body) {}
+
+      function isValidJson(string) {
+        if (!string && typeof string !== "string") return false;
+
+        try {
+          JSON.parse(string);
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      let parsedBody = body;
+
+      const contentType = headers["Content-Type"] || headers["content-type"];
+
+      if (contentType === "application/json" && body) {
+        if (isValidJson(body)) {
+            parsedBody = JSON.parse(body)
+        }
+      } else if (contentType === "application/x-www-form-urlencoded" && body) {
+        parsedBody = parseFormData(body);
+      }
+
+      return { method, path, version, headers, body: parsedBody };
     }
   }
 
@@ -55,7 +80,9 @@ export class Server extends EventEmitter {
       503: "Service Unavailable",
     };
 
-    return statusTexts.hasOwnProperty(statusCode) ? statusTexts[statusCode] : undefined
+    return statusTexts.hasOwnProperty(statusCode)
+      ? statusTexts[statusCode]
+      : undefined;
   }
 
   #buildResponseMessage(statusCode, headers, data) {
@@ -123,7 +150,7 @@ export class Server extends EventEmitter {
             status(code) {
               this.statusCode = code;
               return this;
-            }, 
+            },
 
             setHeader(name, value) {
               this.headers[name] = value;
@@ -137,7 +164,7 @@ export class Server extends EventEmitter {
                 data
               );
 
-              console.log(response)
+              console.log(response);
               _socket.write(response);
               _socket.end();
             },
@@ -151,8 +178,8 @@ export class Server extends EventEmitter {
           const routeKey = `${request.method}:${request.path}`;
 
           if (!this.routes.has(routeKey)) {
-            response.setHeader("Content-Type", "text/html")
-            response.status(404).send(`<span>${request.path} Not Found!<span>`)
+            response.setHeader("Content-Type", "text/html");
+            response.status(404).send(`<span>${request.path} Not Found!<span>`);
           } else {
             const routeHandler = this.routes.get(routeKey);
             routeHandler(request, response);
@@ -184,6 +211,6 @@ export class Server extends EventEmitter {
   }
 }
 
-const serverScratch = { Server }
+const serverScratch = { Server };
 
-export default serverScratch
+export default serverScratch;
