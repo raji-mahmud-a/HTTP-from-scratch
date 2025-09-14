@@ -34,7 +34,7 @@ export class Server extends EventEmitter {
       function parseFormData(body) {}
 
       function isValidJson(string) {
-        if (!string && typeof string !== "string") return false;
+        if (!string || typeof string !== "string") return false;
 
         try {
           JSON.parse(string);
