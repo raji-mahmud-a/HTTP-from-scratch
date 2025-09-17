@@ -27,7 +27,9 @@ export class Server extends EventEmitter {
       const headers = {};
 
       for (let i = 1; i < lines.length; i++) {
-        const [key, value] = lines[i].split(": ");
+        const [key, value] = lines[i]
+          .split(": ")
+          .map((string) => string.toLowerCase());
         headers[key] = value;
       }
 
@@ -55,7 +57,7 @@ export class Server extends EventEmitter {
 
       let parsedBody = body;
 
-      const contentType = headers["Content-Type"] || headers["content-type"];
+      const contentType = headers["content-type"];
 
       if (contentType === "application/json" && body) {
         if (isValidJson(body)) {
