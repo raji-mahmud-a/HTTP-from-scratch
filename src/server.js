@@ -175,9 +175,8 @@ export class Server extends EventEmitter {
                 data
               );
 
-              console.log(response);
               _socket.write(response);
-              _socket.end();
+              _socket.end() 
             },
 
             json(obj) {
