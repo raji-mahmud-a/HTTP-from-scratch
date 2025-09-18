@@ -48,6 +48,18 @@ server.start()
 - [ ] Static file serving
 - [ ] Error handling middleware
 
+### RFC Features to add
+### RFC Features to Add
+- [ ] Support `Content-Length` body parsing  
+- [ ] Implement `Transfer-Encoding: chunked` decoding  
+- [ ] Connection persistence (`keep-alive` by default)  
+- [ ] Handle `Connection: close` termination  
+- [ ] Improve header parsing (case-insensitive keys, trim values)  
+- [ ] Return standard headers (`Date`, `Server`, `Connection`)  
+- [ ] Handle `405 Method Not Allowed`  
+- [ ] Robust error handling for unhandled exceptions  
+- [ ] Optional caching headers (`ETag`, `Cache-Control`)  
+
 ## What I Learned
 - TCP socket programming
 - HTTP protocol internals

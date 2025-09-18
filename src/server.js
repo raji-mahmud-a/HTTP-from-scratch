@@ -219,6 +219,9 @@ export class Server extends EventEmitter {
     const route = `${method.toUpperCase()}:${path}`;
     this.routes.set(route, routeHandler);
   }
+
+  
+
 }
 
 const serverScratch = { Server };
