@@ -48,7 +48,6 @@ server.start()
 - [ ] Static file serving
 - [ ] Error handling middleware
 
-### RFC Features to add
 ### RFC Features to Add
 - [ ] Support `Content-Length` body parsing  
 - [ ] Implement `Transfer-Encoding: chunked` decoding  
