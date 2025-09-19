@@ -19,15 +19,15 @@ export class Server extends EventEmitter {
 
   #parseRequestMessage(requestMessage) {
     if (requestMessage.includes("\r\n\r\n")) {
-
       const [head, body] = requestMessage.split("\r\n\r\n");
       const lines = head.split("\r\n");
-      
-      const requestLineRegex = /^(GET|POST)\s+(\S+)+\sHTTP(\d.\d)$/
-      const requestLine = requestLineRegex.exec(lines[0])
+
+      const requestLineRegex = /^(GET|POST)\s+(\S+)+\sHTTP\/(\d.\d)$/;
+      const requestLine = requestLineRegex.exec(lines[0]);
 
       if (!requestLine) return undefined; // unexisting or invalid request line
 
+      const [_, method, path, version] = requestLine;
 
       const headers = {};
 
@@ -181,7 +181,7 @@ export class Server extends EventEmitter {
               );
 
               _socket.write(response);
-              _socket.end() 
+              _socket.end();
             },
 
             json(obj) {
@@ -224,9 +224,6 @@ export class Server extends EventEmitter {
     const route = `${method.toUpperCase()}:${path}`;
     this.routes.set(route, routeHandler);
   }
-
-  
-
 }
 
 const serverScratch = { Server };
