@@ -22,7 +22,8 @@ export class Server extends EventEmitter {
       const [head, body] = requestMessage.split("\r\n\r\n");
 
       const lines = head.split("\r\n");
-      const [method, path, version] = lines[0].split(" ");
+      // const [method, path, version] = lines[0].split(" ");
+      
 
       const headers = {};
 
