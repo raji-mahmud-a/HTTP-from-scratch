@@ -19,11 +19,15 @@ export class Server extends EventEmitter {
 
   #parseRequestMessage(requestMessage) {
     if (requestMessage.includes("\r\n\r\n")) {
-      const [head, body] = requestMessage.split("\r\n\r\n");
 
+      const [head, body] = requestMessage.split("\r\n\r\n");
       const lines = head.split("\r\n");
-      // const [method, path, version] = lines[0].split(" ");
       
+      const requestLineRegex = /^(GET|POST)\s+(\S+)+\sHTTP(\d.\d)$/
+      const requestLine = requestLineRegex.exec(lines[0])
+
+      if (!requestLine) return undefined; // unexisting or invalid request line
+
 
       const headers = {};
 
