@@ -23,6 +23,8 @@ export class Server extends EventEmitter {
       const lines = head.split("\r\n");
 
       const requestLineRegex = /^(GET|POST)\s+(\S+)+\sHTTP\/(\d.\d)$/;
+      const headersRegex = /^([^:]+):\s*(.*)$/
+
       const requestLine = requestLineRegex.exec(lines[0]);
 
       if (!requestLine) return undefined; // unexisting or invalid request line
@@ -32,10 +34,16 @@ export class Server extends EventEmitter {
       const headers = {};
 
       for (let i = 1; i < lines.length; i++) {
-        const [key, value] = lines[i]
-          .split(": ")
-          .map((string) => string.toLowerCase());
-        headers[key] = value;
+        const headerLine = headersRegex.exec(lines[i])
+
+        if (headerLine) {
+          const [_, key = key.toLowerCase(), value] = headerLine;
+          headers[key] = value
+        }
+      }
+
+      for (let i = 1; i < lines.length; i++) {
+
       }
 
       function parseFormData(body) {
@@ -143,7 +151,7 @@ export class Server extends EventEmitter {
             /**
              *
              * @param {string} header
-             * @returns {boolean}
+             * @returns {String}
              */
             getHeader: (header) => {
               return request.headers.hasOwnProperty(header)
