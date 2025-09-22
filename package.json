@@ -11,9 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/greatm3/HTTP-from-scratch.git"
   },
-  "author": "Great Ezenna", 
+  "author": "Great Ezenna",
   "bugs": {
     "url": "https://github.com/greatm3/HTTP-from-scratch/issues"
   },
-  "homepage": "https://github.com/greatm3/HTTP-from-scratch#readme"
+  "homepage": "https://github.com/greatm3/HTTP-from-scratch#readme",
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2"
+  }
 }

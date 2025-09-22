@@ -70,7 +70,7 @@ export class Server extends EventEmitter {
 
       let parsedBody = body;
 
-      const contentType = headers["content-type"];
+      const contentType = headers["Content-Type"];
 
       if (contentType === "application/json" && body) {
         if (isValidJson(body)) {
