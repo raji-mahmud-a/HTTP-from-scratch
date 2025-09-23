@@ -3,7 +3,7 @@ import { EventEmitter } from "node:events";
  
 export class Server extends EventEmitter {
   #_server;
-
+ 
   /**
    * Creates a new Server instance
    * @param {Object} [options = {}] - Server configuration options
