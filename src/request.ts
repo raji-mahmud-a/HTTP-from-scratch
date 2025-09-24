@@ -19,6 +19,11 @@ class RequestMessage extends Readable {
     body: string;
     constructor(connection: net.Socket, parsedMessage: RequestMessageType) {
         super();
+        
+        if (!connection || !parsedMessage) {
+            throw new Error("Invalid arguments provided to RequestMessage constructor");
+        }
+
         this.requestMessage = parsedMessage;
         this.method = parsedMessage?.method || "";
         this.path = parsedMessage?.path || "";
@@ -31,6 +36,13 @@ class RequestMessage extends Readable {
             ? this.headers[header]
             : undefined;
     }
+
+    _read(size: number): void {
+        this.push(this.body);
+        this.push(null);
+    }
+
+
 }
 
 export default RequestMessage;
