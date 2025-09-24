@@ -1,5 +1,5 @@
 function parseRequestMessage(requestData: string) {
-    if (!requestData) return {}
+    if (!requestData) return {};
 
     const [head, body] = requestData.split("\r\n\r\n");
     const lines = head.split("\r\n");
@@ -31,8 +31,6 @@ function parseRequestMessage(requestData: string) {
     return { method, path, version, headers, body };
 }
 
-const utils = {
-    parseRequestMessage
-}
+const utils = { parseRequestMessage };
 
-export default utils
+export default utils;
