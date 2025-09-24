@@ -31,8 +31,8 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                 // check if request message has ended, to prevent responding to half recieved chunks of data
                 if (data.includes("\r\n\r\n")) {
                     const parsedMessage = utils.parseRequestMessage(data);
-
-                    if (parsedMessage) {
+ 
+                    if (parsedMessage) { 
                         const request: RequestMessage = new RequestMessage(connection, parsedMessage)
                         const response: ResponseMessage = new ResponseMessage()
                         callback(request, response);
