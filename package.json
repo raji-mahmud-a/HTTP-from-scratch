@@ -5,7 +5,8 @@
   "main": "src/main.js",
   "type": "module",
   "scripts": {
-    "start": "node src/main.js"
+    "build": "npx tsc",
+    "dev": "npx ts-node src/main.ts"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/greatm3/HTTP-from-scratch#readme",
   "devDependencies": {
     "@types/node": "^24.5.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
