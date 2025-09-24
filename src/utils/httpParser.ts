@@ -31,8 +31,8 @@ function parseRequestMessage(requestData: string) {
     return { method, path, version, headers, body };
 }
 
-const parser = {
+const utils = {
     parseRequestMessage
 }
 
-export default parser
+export default utils

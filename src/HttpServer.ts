@@ -2,7 +2,7 @@ import net from "node:net";
 import { EventEmitter } from "node:events";
 import RequestMessage from "./request.js";
 import ResponseMessage from "./response.js";
-import parser from "./parser/httpParser.js";
+import utils from "./utils/httpParser.js";
 
 interface ServerConfig {
     port: number;
@@ -28,10 +28,10 @@ class HTTPServer extends EventEmitter implements ServerConfig {
 
                 // check if request message has ended, to prevent responding to half recieved chunks of data
                 if (data.includes("\r\n\r\n")) {
-                    const parseMessage = parser.parseRequestMessage(data);
+                    const parseMessage = utils.parseRequestMessage(data);
 
                     if (parseMessage) {
-                        
+
                     }
                 }
             });
