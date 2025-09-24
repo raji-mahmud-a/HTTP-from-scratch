@@ -19,7 +19,7 @@ class RequestMessage extends Readable {
     body: string;
     constructor(connection: net.Socket, parsedMessage: RequestMessageType) {
         super();
-        
+
         if (!connection || !parsedMessage) {
             throw new Error("Invalid arguments provided to RequestMessage constructor");
         }
@@ -37,6 +37,7 @@ class RequestMessage extends Readable {
             : undefined;
     }
 
+    // just push everything at once for now
     _read(size: number): void {
         this.push(this.body);
         this.push(null);
