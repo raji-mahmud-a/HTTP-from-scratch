@@ -13,8 +13,8 @@ $ cd HTTP-from-scratch
 # Install dependencies
 npm install
 
-# Start the server (default: 127.0.0.1:8000)
-npm run start
+# run in development mode 
+npm run dev
 ```
 
 ```js

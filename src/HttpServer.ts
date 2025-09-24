@@ -9,7 +9,10 @@ interface ServerConfig {
     host: string;
 }
 
-type ServerHandler = (request: RequestMessage, response: ResponseMessage) => void
+type ServerHandler = (
+    request: RequestMessage,
+    response: ResponseMessage
+) => void;
 
 class HTTPServer extends EventEmitter implements ServerConfig {
     port: number;
@@ -31,10 +34,13 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                 // check if request message has ended, to prevent responding to half recieved chunks of data
                 if (data.includes("\r\n\r\n")) {
                     const parsedMessage = utils.parseRequestMessage(data);
- 
-                    if (parsedMessage) { 
-                        const request: RequestMessage = new RequestMessage(connection, parsedMessage)
-                        const response: ResponseMessage = new ResponseMessage()
+
+                    if (parsedMessage) {
+                        const request: RequestMessage = new RequestMessage(
+                            connection,
+                            parsedMessage
+                        );
+                        const response: ResponseMessage = new ResponseMessage();
                         callback(request, response);
                         this.emit("request", request, response);
                     }
@@ -42,6 +48,10 @@ class HTTPServer extends EventEmitter implements ServerConfig {
             });
         });
     }
+
+    listen(callback?: () => void) {
+        this.#server.listen(this.port, callback);
+    }
 }
 
-export default HTTPServer
+export default HTTPServer;
