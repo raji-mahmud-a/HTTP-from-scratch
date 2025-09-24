@@ -35,6 +35,8 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                     if (parsedMessage) {
                         const request: RequestMessage = new RequestMessage(connection, parsedMessage)
                         const response: ResponseMessage = new ResponseMessage()
+                        callback(request, response);
+                        this.emit("request", request, response);
                     }
                 }
             });
