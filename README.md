@@ -5,12 +5,16 @@ No frameworks used.
 
 ## usage
 
-```bash
+```sh
 $ git clone https://github.com/greatm3/HTTP-from-scratch
 
 $ cd HTTP-from-scratch
 
-$ npm start # node src/main.js
+# Install dependencies
+npm install
+
+# Start the server (default: 127.0.0.1:8000)
+npm run start
 ```
 
 ```js
