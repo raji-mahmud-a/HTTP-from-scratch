@@ -1,4 +1,6 @@
 function parseRequestMessage(requestData: string) {
+    if (!requestData) return {}
+
     const [head, body] = requestData.split("\r\n\r\n");
     const lines = head.split("\r\n");
 
@@ -13,7 +15,7 @@ function parseRequestMessage(requestData: string) {
 
     const [_, method, path, version] = requestLine;
 
-    const headers = {};
+    const headers: Record<string, string> = {};
 
     for (let i = 0; i < lines.length; i++) {
         const headerLine = regex.headerLines.exec(lines[i]);
