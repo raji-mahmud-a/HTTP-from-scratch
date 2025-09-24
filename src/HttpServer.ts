@@ -9,6 +9,8 @@ interface ServerConfig {
     host: string;
 }
 
+type ServerHandler = (request: RequestMessage, response: ResponseMessage) => void
+
 class HTTPServer extends EventEmitter implements ServerConfig {
     port: number;
     host: string;
@@ -20,7 +22,7 @@ class HTTPServer extends EventEmitter implements ServerConfig {
         this.host = host;
     }
 
-    makeServer(request?: RequestMessage, response?: ResponseMessage) {
+    makeServer(callback: ServerHandler) {
         this.#server = net.createServer((connection) => {
             let data = "";
             connection.on("data", (chunk: Buffer) => {
@@ -28,13 +30,16 @@ class HTTPServer extends EventEmitter implements ServerConfig {
 
                 // check if request message has ended, to prevent responding to half recieved chunks of data
                 if (data.includes("\r\n\r\n")) {
-                    const parseMessage = utils.parseRequestMessage(data);
+                    const parsedMessage = utils.parseRequestMessage(data);
 
-                    if (parseMessage) {
-
+                    if (parsedMessage) {
+                        const request: RequestMessage = new RequestMessage(connection, parsedMessage)
+                        const response: ResponseMessage = new ResponseMessage()
                     }
                 }
             });
         });
     }
 }
+
+export default HTTPServer
