@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "dev": "npx ts-node src/main.ts"
+    "dev": "npx ts-node src/main.ts",
+    "start": "node dist/main.js"
   },
   "repository": {
     "type": "git",
