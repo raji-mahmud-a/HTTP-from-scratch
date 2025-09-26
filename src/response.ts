@@ -84,7 +84,7 @@ class ResponseMessage extends Writable {
                 this.connection.write(Buffer.from(response), encoding, callback)
                 this.headersSent = false;
             } else {
-                this.connection.write(chunk, encoding, callback)
+                this.connection.write(Buffer.from(chunk), encoding, callback)
             }
         } catch(e) {
             callback(e as Error)
