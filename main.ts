@@ -1,4 +1,4 @@
-import HTTPServer from "./src/HttpServer";
+import HTTPServer from "./src/HttpServer.js";
 
 const server = new HTTPServer()
 

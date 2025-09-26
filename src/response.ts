@@ -81,7 +81,7 @@ class ResponseMessage extends Writable {
         try {
             if (!this.headersSent) {
                 const response = this.buildResponse(this.statusCode, this.headers, chunk)
-                this.connection.write(response, encoding, callback)
+                this.connection.write(Buffer.from(response), encoding, callback)
                 this.headersSent = false;
             } else {
                 this.connection.write(chunk, encoding, callback)
