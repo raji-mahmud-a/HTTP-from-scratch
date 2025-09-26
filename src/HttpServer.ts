@@ -40,7 +40,7 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                             connection,
                             parsedMessage
                         );
-                        const response: ResponseMessage = new ResponseMessage();
+                        const response: ResponseMessage = new ResponseMessage(connection);
                         callback(request, response);
                         this.emit("request", request, response);
                     }
