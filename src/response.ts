@@ -18,6 +18,12 @@ class ResponseMessage extends Writable {
         this.headers[key] = value;
     }
 
+    setStatusCode(statusCode: number) {
+        if (typeof statusCode === "number") {
+            this.statusCode = statusCode
+        }
+    }
+
     getStatusText(statusCode = this.statusCode) {
         const statusTexts = {
             200: "OK",
@@ -72,9 +78,17 @@ class ResponseMessage extends Writable {
         encoding: BufferEncoding,
         callback: (error?: Error | null) => void
     ): void {
-        // if (!this.headersSent) {
-        //     this.connection.write();
-        // }
+        try {
+            if (!this.headersSent) {
+                const response = this.buildResponse(this.statusCode, this.headers, chunk)
+                this.connection.write(response, encoding, callback)
+                this.headersSent = false;
+            } else {
+                this.connection.write(chunk, encoding, callback)
+            }
+        } catch(e) {
+            callback(e as Error)
+        }
     }
 }
 
