@@ -2,7 +2,7 @@ import net from "node:net";
 import { EventEmitter } from "node:events";
 import RequestMessage from "./request.js";
 import ResponseMessage from "./response.js";
-import utils from "./utils/httpParser.js";
+import utils from "./utils/utils.js";
 
 interface ServerConfig {
     port: number;
