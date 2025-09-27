@@ -25,7 +25,7 @@ class HTTPServer extends EventEmitter implements ServerConfig {
         this.host = host;
     }
 
-    makeServer(callback: ServerHandler) {
+    makeServer(callback?: ServerHandler) {
         this.#server = net.createServer((connection) => {
             let data = "";
             connection.on("data", (chunk: Buffer) => {
@@ -40,9 +40,15 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                             connection,
                             parsedMessage
                         );
-                        const response: ResponseMessage = new ResponseMessage(connection);
-                        callback(request, response);
-                        this.emit("request", request, response);
+                        const response: ResponseMessage = new ResponseMessage(
+                            connection
+                        );
+                        if (callback) {
+                            callback(request, response);
+                            this.emit("request", request, response);
+                        } else {
+                            this.emit("request", request, response)
+                        }
                     }
                 }
             });
