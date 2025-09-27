@@ -57,7 +57,7 @@ class ResponseMessage extends Writable {
         let responseMessage = "";
         let statusText: string = this.getStatusText(statusCode) || "Unknown";
 
-        responseMessage += "HTTP/1.1" + " " + statusCode + statusText + "\r\n";
+        responseMessage += "HTTP/1.1" + " " + statusCode + " " + statusText + "\r\n";
 
         for (let header of Object.entries(headers)) {
             const [key, value] = header;
