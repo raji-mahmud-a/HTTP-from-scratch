@@ -4,25 +4,16 @@ import RequestMessage from "./request.js";
 import ResponseMessage from "./response.js";
 import utils from "./utils/utils.js";
 
-interface ServerConfig {
-    port: number;
-    host: string;
-}
-
 type ServerHandler = (
     request: RequestMessage,
     response: ResponseMessage
 ) => void;
 
-class HTTPServer extends EventEmitter implements ServerConfig {
-    port: number;
-    host: string;
+class HTTPServer extends EventEmitter {
     #server: net.Server;
 
-    constructor({ port = 8000, host = "127.0.0.1" } = {}) {
+    constructor() {
         super();
-        this.port = port;
-        this.host = host;
     }
 
     makeServer(callback?: ServerHandler) {
@@ -47,7 +38,7 @@ class HTTPServer extends EventEmitter implements ServerConfig {
                             callback(request, response);
                             this.emit("request", request, response);
                         } else {
-                            this.emit("request", request, response)
+                            this.emit("request", request, response);
                         }
                     }
                 }
@@ -55,9 +46,43 @@ class HTTPServer extends EventEmitter implements ServerConfig {
         });
     }
 
-    listen(callback?: () => void) {
-        this.#server.listen(this.port, callback);
+    listen(port: number, host: string, callback?: () => void): void;
+    listen(port: number, callback?: () => void): void;
+    listen(
+        options: { port: number; host?: string },
+        callback?: () => void
+    ): void;
+
+    listen(
+        portOrOptions: number | { port: number; host?: string },
+        hostOrCb?: string | (() => void),
+        maybeCb?: () => void
+    ): void {
+        let port: number;
+        let host: string | undefined;
+        let callback: (() => void) | undefined;
+
+        if (typeof portOrOptions === "number") {
+            port = portOrOptions;
+
+            if (typeof hostOrCb === "string") {
+                host = hostOrCb;
+                callback = maybeCb;
+            } else if (typeof hostOrCb === "function") {
+                callback = hostOrCb;
+            }
+        } else {
+            port = portOrOptions.port;
+            host = portOrOptions.host;
+            callback = hostOrCb as (() => void) | undefined;
+        }
+
+        this.#server.listen(port, host);
+        if (callback) {
+            callback();
+        }
     }
 }
+// }
 
 export default HTTPServer;
