@@ -83,6 +83,5 @@ class HTTPServer extends EventEmitter {
         }
     }
 }
-// }
 
 export default HTTPServer;
