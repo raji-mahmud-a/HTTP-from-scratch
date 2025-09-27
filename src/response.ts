@@ -20,7 +20,7 @@ class ResponseMessage extends Writable {
 
     setStatusCode(statusCode: number) {
         if (typeof statusCode === "number") {
-            this.statusCode = statusCode
+            this.statusCode = statusCode;
         }
     }
 
@@ -57,7 +57,8 @@ class ResponseMessage extends Writable {
         let responseMessage = "";
         let statusText: string = this.getStatusText(statusCode) || "Unknown";
 
-        responseMessage += "HTTP/1.1" + " " + statusCode + " " + statusText + "\r\n";
+        responseMessage +=
+            "HTTP/1.1" + " " + statusCode + " " + statusText + "\r\n";
 
         for (let header of Object.entries(headers)) {
             const [key, value] = header;
@@ -65,10 +66,17 @@ class ResponseMessage extends Writable {
         }
 
         if (!headers.hasOwnProperty("Content-Length")) {
-            responseMessage += "Content-Length: " + Buffer.byteLength(data).toString() + "\r\n"
+            responseMessage +=
+                "Content-Length: " +
+                Buffer.byteLength(data).toString() +
+                "\r\n";
         }
 
-        responseMessage += "\r\n" + data
+        if (!headers.hasOwnProperty("Date")) {
+            responseMessage += "Date: " + new Date().toUTCString() + "\r\n";
+        }
+
+        responseMessage += "\r\n" + data;
 
         return responseMessage;
     }
@@ -80,14 +88,22 @@ class ResponseMessage extends Writable {
     ): void {
         try {
             if (!this.headersSent) {
-                const response = this.buildResponse(this.statusCode, this.headers, chunk)
-                this.connection.write(Buffer.from(response), encoding, callback)
+                const response = this.buildResponse(
+                    this.statusCode,
+                    this.headers,
+                    chunk
+                );
+                this.connection.write(
+                    Buffer.from(response),
+                    encoding,
+                    callback
+                );
                 this.headersSent = false;
             } else {
-                this.connection.write(Buffer.from(chunk), encoding, callback)
+                this.connection.write(Buffer.from(chunk), encoding, callback);
             }
-        } catch(e) {
-            callback(e as Error)
+        } catch (e) {
+            callback(e as Error);
         }
     }
 }
