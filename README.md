@@ -23,23 +23,29 @@ npm build
 
 import HTTPServer from "./dist/HttpServer.js";
 
-const server = new HTTPServer({
-    port: 8000,
-    host: "127.0.0.1"
-}) // even without providing the host and port, it defaults to localhost and port: 8000
+const server = new HTTPServer() 
 
 server.makeServer((req, res) => {
     res.setHeader("Content-Type", "text/html")
     res.write("<h1>Hello</h1>")
-    res.connection.end()
 })
  
 
-server.listen()
+server.listen(3971, () => {
+    console.log("Started at ::3971")
+})
 
 ```
 
 - open your browser and go to `http://127.0.0.1:8000`
+
+```js
+// HTTP server class inherits from EventEmitter class, so on recieving data, the instance emits a request message
+
+server.on("request", (req, res) => {
+    // knock yourself out.
+})
+```
 
 ## TODOs
 - [x] Basic HTTP request parsing
