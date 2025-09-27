@@ -37,7 +37,7 @@ server.listen(3971, () => {
 
 ```
 
-- open your browser and go to `http://127.0.0.1:8000`
+- open your browser and go to `http://127.0.0.1:3971`
 
 ```js
 // HTTP server class inherits from EventEmitter class, so on recieving data, the instance emits a request message
@@ -65,3 +65,6 @@ server.on("request", (req, res) => {
 - [ ] Handle `405 Method Not Allowed`  
 - [ ] Robust error handling for unhandled exceptions  
 - [ ] Optional caching headers (`ETag`, `Cache-Control`)  
+
+## DISCLAIMER
+- This project is for learning purposes. Not intended for production use, see [LICENSE](LICENSE).
