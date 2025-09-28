@@ -51,9 +51,8 @@ server.on("request", (req, res) => {
 - [x] Basic HTTP request parsing
 - [x] GET method routing
 - [x] Response object with status/headers
-- [ ] POST method with body parsing
-- [ ] Query parameter parsing (?name=value)
-- [ ] Static file serving 
+- [x] POST method with body parsing
+- [ ] Query parameter parsing (?name=value) 
 
 ### RFC Features to Add 
 
