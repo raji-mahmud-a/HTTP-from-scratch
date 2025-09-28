@@ -52,9 +52,7 @@ server.on("request", (req, res) => {
 - [x] GET method routing
 - [x] Response object with status/headers
 - [x] POST method with body parsing
-- [ ] Query parameter parsing (?name=value) 
 
-### RFC Features to Add 
 
 ## DISCLAIMER
 - This project is for learning purposes. Not intended for production use, see [LICENSE](LICENSE).
