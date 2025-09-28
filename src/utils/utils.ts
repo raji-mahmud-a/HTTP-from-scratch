@@ -28,7 +28,41 @@ function parseRequestMessage(requestData: string) {
         }
     }
 
-    return { method, path, version, headers, body };
+    function parseFormData(body: string) {
+        const params = {};
+
+        body.split("&").forEach((entry) => {
+            const [key, value] = entry.split("=");
+            params[key] = value;
+        });
+
+        return params;
+    }
+
+    function isValidJson(string: string) {
+        if (!string || typeof string !== "string") return false;
+
+        try {
+            JSON.parse(string);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    let parsedBody: string | Record<string, string> = body;
+
+    const contentType = headers["content-type"];
+
+    if (contentType === "application/json" && body) {
+        if (isValidJson(body)) {
+            parsedBody = JSON.parse(body);
+        }
+    } else if (contentType === "application/x-www-form-urlencoded" && body) {
+        parsedBody = parseFormData(body);
+    }
+
+    return { method, path, version, headers, body: parsedBody };
 }
 
 const utils = { parseRequestMessage };

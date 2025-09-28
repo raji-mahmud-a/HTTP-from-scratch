@@ -55,16 +55,7 @@ server.on("request", (req, res) => {
 - [ ] Query parameter parsing (?name=value)
 - [ ] Static file serving 
 
-### RFC Features to Add
-- [x] Support `Content-Length` body parsing  
-- [ ] Implement `Transfer-Encoding: chunked` decoding  
-- [ ] Connection persistence (`keep-alive` by default)  
-- [ ] Handle `Connection: close` termination  
-- [x] Improve header parsing (case-insensitive keys, trim values)  
-- [ ] Return standard headers (`Date`, `Server`, `Connection`)  
-- [ ] Handle `405 Method Not Allowed`  
-- [ ] Robust error handling for unhandled exceptions  
-- [ ] Optional caching headers (`ETag`, `Cache-Control`)  
+### RFC Features to Add 
 
 ## DISCLAIMER
 - This project is for learning purposes. Not intended for production use, see [LICENSE](LICENSE).
