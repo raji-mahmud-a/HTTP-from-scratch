@@ -14,7 +14,7 @@ $ cd HTTP-from-scratch
 npm install
 
 # compiles the typescript to js, creates a dist/ directory
-npm build
+npm run build
 
 ```
 
@@ -32,7 +32,7 @@ server.makeServer((req, res) => {
  
 
 server.listen(3971, () => {
-    console.log("Started at ::3971")
+    console.log("Started at 127.0.0.1:3971")
 })
 
 ```
