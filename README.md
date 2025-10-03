@@ -52,6 +52,7 @@ server.on("request", (req, res) => {
 - [x] GET method routing
 - [x] Response object with status/headers
 - [x] POST method with body parsing
+- [x] Query parsing
 
 
 ## DISCLAIMER
