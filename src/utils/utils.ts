@@ -15,6 +15,8 @@ function parseRequestMessage(requestData: string) {
 
     const [_, method, path, version] = requestLine;
 
+    const [pathName, queryString] = path.split("?");
+
     const headers: Record<string, string> = {};
 
     for (let i = 0; i < lines.length; i++) {
@@ -50,6 +52,29 @@ function parseRequestMessage(requestData: string) {
         }
     }
 
+    // query params if any
+    function parseQuery(queryString) {
+        if (!queryString) return undefined;
+
+        queryString = new URLSearchParams(queryString);
+
+        let result = {};
+        for (let field of queryString) {
+            const [key, value] = field;
+            if (result[key]) {
+                if (Array.isArray(result[key])) {
+                    result[key].push(value);
+                } else {
+                    result[key] = [result[key], value];
+                }
+            } else {
+                result[key] = value;
+            }
+        }
+
+        return result;
+    }
+
     let parsedBody: string | Record<string, string> = body;
 
     const contentType = headers["content-type"];
@@ -62,7 +87,14 @@ function parseRequestMessage(requestData: string) {
         parsedBody = parseFormData(body);
     }
 
-    return { method, path, version, headers, body: parsedBody };
+    return {
+        method,
+        path: pathName,
+        version,
+        headers,
+        body: parsedBody,
+        query: parseQuery(queryString),
+    };
 }
 
 const utils = { parseRequestMessage };

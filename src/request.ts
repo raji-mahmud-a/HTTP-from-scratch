@@ -7,6 +7,7 @@ interface ParsedRequestMessage {
     version?: string | undefined;
     headers?: Record<string, string> | undefined;
     body?: Record<string, string> | string | undefined;
+    query?: {} | undefined
 }
 
 type RequestMessageType = ParsedRequestMessage | undefined;
@@ -17,6 +18,7 @@ class RequestMessage extends Readable {
     path: string;
     headers: Record<string, string>;
     body: Record<string, string> | string;
+    query: {}
     constructor(connection: net.Socket, parsedMessage: RequestMessageType) {
         super();
 
@@ -29,6 +31,7 @@ class RequestMessage extends Readable {
         this.path = parsedMessage?.path || "";
         this.headers = parsedMessage?.headers || {};
         this.body = parsedMessage?.body || {};
+        this.query = parsedMessage?.query || {}
     }
 
     getHeader(header: string): string | undefined {
