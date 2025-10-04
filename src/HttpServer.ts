@@ -35,7 +35,25 @@ class HTTPServer extends EventEmitter {
                             connection
                         );
 
-                        
+                        // check if to keep connection alive or close it.
+                        if (
+                            parsedMessage.headers &&
+                            parsedMessage.headers["connection"]
+                        ) {
+                            const connectionMessage =
+                                parsedMessage.headers["connection"];
+
+                            if (
+                                connectionMessage === "close" ||
+                                parsedMessage.version === "1.0"
+                            ) {
+                                connection.end();
+                            } else {
+                                connection.setTimeout(5000, () => {
+                                    connection.end();
+                                });
+                            }
+                        }
 
                         if (callback) {
                             callback(request, response);
@@ -54,10 +72,10 @@ class HTTPServer extends EventEmitter {
             connection.on("error", (err: Error & { code: string }) => {
                 // on client disconnection ignore error
                 if (err.code === "ECONNRESET") {
-                    return
+                    return;
                 }
 
-                this.emit("error", err)
+                this.emit("error", err);
             });
         });
     }
