@@ -34,6 +34,9 @@ class HTTPServer extends EventEmitter {
                         const response: ResponseMessage = new ResponseMessage(
                             connection
                         );
+
+                        
+
                         if (callback) {
                             callback(request, response);
                             this.emit("request", request, response);
