@@ -98,7 +98,7 @@ class ResponseMessage extends Writable {
                     encoding,
                     callback
                 );
-                this.headersSent = false;
+                this.headersSent = true;
             } else {
                 this.connection.write(Buffer.from(chunk), encoding, callback);
             }
