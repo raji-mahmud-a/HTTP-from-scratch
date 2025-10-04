@@ -43,6 +43,19 @@ class HTTPServer extends EventEmitter {
                     }
                 }
             });
+
+            connection.on("close", () => {
+                connection.end();
+            });
+
+            connection.on("error", (err: Error & { code: string }) => {
+                // on client disconnection ignore error
+                if (err.code === "ECONNRESET") {
+                    return
+                }
+
+                this.emit("error", err)
+            });
         });
     }
 
