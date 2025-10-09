@@ -1,8 +1,8 @@
-import net from "node:net";
-import { EventEmitter } from "node:events";
-import RequestMessage from "./request.js";
-import ResponseMessage from "./response.js";
-import utils from "./utils/utils.js";
+import net from 'node:net';
+import { EventEmitter } from 'node:events';
+import RequestMessage from './request.js';
+import ResponseMessage from './response.js';
+import utils from './utils/utils.js';
 
 type ServerHandler = (
     request: RequestMessage,
@@ -18,12 +18,28 @@ class HTTPServer extends EventEmitter {
 
     makeServer(callback?: ServerHandler) {
         this.#server = net.createServer((connection) => {
-            let data = "";
-            connection.on("data", (chunk: Buffer) => {
+            const MAX_REQUEST_SIZE = 1024 * 1024; // 1MB
+            let totalBytes = 0;
+            let data = '';
+            connection.on('data', (chunk: Buffer) => {
+                totalBytes += chunk.length;
+
+                if (totalBytes > MAX_REQUEST_SIZE) {
+                    connection.write('HTTP/1.1 413 Payload Too Large\r\n\r\n');
+                    connection.end(() => {
+                        console.log(
+                            `Received chunk: ${chunk.length} bytes, Total: ${totalBytes} bytes`
+                        );
+                    });
+                    return;
+                }
+                // console.log(
+                //     `Received chunk: ${chunk.length} bytes, Total: ${totalBytes} bytes`
+                // );
                 data += chunk.toString();
 
                 // check if request message has ended, to prevent responding to half recieved chunks of data
-                if (data.includes("\r\n\r\n")) {
+                if (data.includes('\r\n\r\n')) {
                     const parsedMessage = utils.parseRequestMessage(data);
 
                     if (parsedMessage) {
@@ -38,14 +54,14 @@ class HTTPServer extends EventEmitter {
                         // check if to keep connection alive or close it.
                         if (
                             parsedMessage.headers &&
-                            parsedMessage.headers["connection"]
+                            parsedMessage.headers['connection']
                         ) {
                             const connectionMessage =
-                                parsedMessage.headers["connection"];
+                                parsedMessage.headers['connection'];
 
                             if (
-                                connectionMessage === "close" ||
-                                parsedMessage.version === "1.0"
+                                connectionMessage === 'close' ||
+                                parsedMessage.version === '1.0'
                             ) {
                                 connection.end();
                             } else {
@@ -57,25 +73,25 @@ class HTTPServer extends EventEmitter {
 
                         if (callback) {
                             callback(request, response);
-                            this.emit("request", request, response);
+                            this.emit('request', request, response);
                         } else {
-                            this.emit("request", request, response);
+                            this.emit('request', request, response);
                         }
                     }
                 }
             });
 
-            connection.on("close", () => {
+            connection.on('close', () => {
                 connection.end();
             });
 
-            connection.on("error", (err: Error & { code: string }) => {
+            connection.on('error', (err: Error & { code: string }) => {
                 // on client disconnection ignore error
-                if (err.code === "ECONNRESET") {
+                if (err.code === 'ECONNRESET') {
                     return;
                 }
 
-                this.emit("error", err);
+                this.emit('error', err);
             });
         });
     }
@@ -96,13 +112,13 @@ class HTTPServer extends EventEmitter {
         let host: string | undefined;
         let callback: (() => void) | undefined;
 
-        if (typeof portOrOptions === "number") {
+        if (typeof portOrOptions === 'number') {
             port = portOrOptions;
 
-            if (typeof hostOrCb === "string") {
+            if (typeof hostOrCb === 'string') {
                 host = hostOrCb;
                 callback = maybeCb;
-            } else if (typeof hostOrCb === "function") {
+            } else if (typeof hostOrCb === 'function') {
                 callback = hostOrCb;
             }
         } else {
