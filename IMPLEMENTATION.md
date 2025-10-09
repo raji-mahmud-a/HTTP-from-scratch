@@ -146,10 +146,3 @@
 
 ---
 
-## Priority Order
-
-1. Start with **Critical Issues** (security and correctness)
-2. Move to **Important Issues** (stability and compliance)
-3. Add **Essential HTTP/1.1 Features** (chunked encoding first)
-4. Enhance with **Content Handling** features as needed
-5. **Learning Additions** are exploratory—do when curious
