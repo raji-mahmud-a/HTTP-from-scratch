@@ -5,7 +5,7 @@ function parseRequestMessage(requestData: string) {
     const lines = head.split("\r\n");
 
     const regex = {
-        requestLine: /^(GET|POST)\s+(\S+)+\sHTTP\/(\d.\d)$/,
+        requestLine: /^([A-Za-z]+)\s+(\S+)+\sHTTP\/(\d.\d)$/,
         headerLines: /^([^:]+):\s*(.*)$/,
     };
 
